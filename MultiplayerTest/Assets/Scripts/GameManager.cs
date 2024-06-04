@@ -19,6 +19,16 @@ public class GameManager : MonoBehaviour
         if (GUILayout.Button("Server")) m_NetworkManager.StartServer();
     }
 
+    void StatusLabels()
+    {
+        var mode = m_NetworkManager.IsHost ?
+            "Host" : m_NetworkManager.IsServer ? "Server" : "Client";
+
+        GUILayout.Label("Transport: " +
+            m_NetworkManager.NetworkConfig.NetworkTransport.GetType().Name);
+        GUILayout.Label("Mode: " + mode);
+    }
+
     private void OnGUI()
     {
         GUILayout.BeginArea(new Rect(10, 10, 300, 300));
@@ -28,7 +38,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            //StatusLabels();
+            StatusLabels();
 
             //SubmitNewPosition();
         }
