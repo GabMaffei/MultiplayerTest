@@ -40,9 +40,27 @@ public class GameManager : MonoBehaviour
         {
             StatusLabels();
 
-            //SubmitNewPosition();
+            SubmitNewPosition();
         }
 
         GUILayout.EndArea();
+    }
+
+    void SubmitNewPosition()
+    {
+        if (GUILayout.Button(m_NetworkManager.IsServer ? "Move" : "Request Position Change"))
+        {
+            if (m_NetworkManager.IsServer && !m_NetworkManager.IsClient)
+            {
+                foreach (ulong uid in m_NetworkManager.ConnectedClientsIds)
+                    m_NetworkManager.SpawnManager.GetPlayerNetworkObject(uid).GetComponent<Player>().Move();
+            }
+            else
+            {
+                var playerObject = m_NetworkManager.SpawnManager.GetLocalPlayerObject();
+                var player = playerObject.GetComponent<Player>();
+                player.Move();
+            }
+        }
     }
 }
